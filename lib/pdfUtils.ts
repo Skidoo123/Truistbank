@@ -33,6 +33,8 @@ export const downloadStatementPDF = async (elementId: string, filename: string =
         if (clonedElement) {
           clonedElement.style.width = '800px';
           clonedElement.style.maxWidth = '800px';
+          clonedElement.style.maxHeight = 'none';
+          clonedElement.style.overflow = 'visible';
           clonedElement.style.margin = '0 auto';
           clonedElement.style.transform = 'none';
         }

@@ -14,20 +14,26 @@
     background-color: #0F0918;
     color: #F8FAFC;
     font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
   }
 }
 
-/* Custom scrollbars */
+/* Custom scrollbars & smooth momentum touch scrolling */
+.custom-scrollbar {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.05);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 3px;
+  background: rgba(0, 163, 166, 0.4);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #00A3A6;

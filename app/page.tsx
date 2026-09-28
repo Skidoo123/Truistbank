@@ -27,9 +27,9 @@ export default function Home() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [viewMode, setViewMode] = useState<'split' | 'preview' | 'form'>('split');
 
-  // Generate initial mock data on mount
+  // Generate initial mock data on mount with 29 transactions by default
   useEffect(() => {
-    const initialTx = generateMockTransactions(initialDates.startDate, initialDates.endDate);
+    const initialTx = generateMockTransactions(initialDates.startDate, initialDates.endDate, 29);
     setTransactions(initialTx);
   }, [initialDates]);
 
@@ -81,7 +81,7 @@ export default function Home() {
   };
 
   const handleGenerateMockData = (count?: number) => {
-    const newTx = generateMockTransactions(startDate, endDate, count);
+    const newTx = generateMockTransactions(startDate, endDate, count || 29);
     setTransactions(newTx);
   };
 
@@ -90,12 +90,12 @@ export default function Home() {
     setOpeningBalance(3450.75);
     setStartDate(initialDates.startDate);
     setEndDate(initialDates.endDate);
-    setTransactions(generateMockTransactions(initialDates.startDate, initialDates.endDate));
+    setTransactions(generateMockTransactions(initialDates.startDate, initialDates.endDate, 29));
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0614] text-slate-100 flex flex-col font-sans">
-      {/* Navbar Header */}
+    <div className="min-h-screen max-w-full overflow-x-hidden bg-[#0D0614] text-slate-100 flex flex-col font-sans">
+      {/* Navbar Header (Fixed Top) */}
       <Navbar
         data={statementData}
         viewMode={viewMode}
@@ -104,10 +104,10 @@ export default function Home() {
       />
 
       {/* Main Workspace Layout */}
-      <main className="flex-1 max-w-[1600px] w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+      <main className="flex-1 max-w-[1650px] w-full mx-auto p-3 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start overflow-hidden">
         {/* LEFT COLUMN: Form Controls Dashboard */}
         <div
-          className={`lg:col-span-5 xl:col-span-4 h-[calc(100vh-100px)] sticky top-20 no-print ${
+          className={`lg:col-span-5 xl:col-span-4 h-[calc(100vh-110px)] overflow-y-auto sticky top-20 no-print rounded-xl border border-white/10 bg-[#130824] p-2 sm:p-4 custom-scrollbar ${
             viewMode === 'preview' ? 'hidden lg:block' : 'block'
           }`}
         >
@@ -126,29 +126,37 @@ export default function Home() {
           />
         </div>
 
-        {/* RIGHT COLUMN: Live Truist Bank Statement Preview */}
+        {/* RIGHT COLUMN: Dedicated Vertically Scrollable Document Preview Container */}
         <div
-          className={`w-full ${
+          className={`w-full flex flex-col h-[calc(100vh-110px)] min-h-[500px] overflow-hidden ${
             viewMode === 'form'
-              ? 'hidden lg:block lg:col-span-7 xl:col-span-8'
+              ? 'hidden lg:flex lg:col-span-7 xl:col-span-8'
               : viewMode === 'preview'
               ? 'lg:col-span-12'
               : 'lg:col-span-7 xl:col-span-8'
           }`}
         >
-          {/* Header Banner over Statement */}
-          <div className="no-print mb-3 flex justify-between items-center bg-white/5 px-4 py-2.5 rounded-lg border border-white/10 text-xs text-slate-400">
+          {/* Fixed Top Control / Status Bar over Preview */}
+          <div className="no-print mb-3 flex flex-wrap justify-between items-center bg-[#1D0933]/90 px-4 py-2.5 rounded-lg border border-white/10 text-xs text-slate-300 gap-2 shrink-0 shadow-md">
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-              <span className="text-slate-200 font-medium">Live Render Engine:</span>
-              <span>Official Truist Statement Document Format</span>
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-slate-100 font-semibold">Document Preview Engine</span>
+              <span className="text-[10px] bg-amber-500/20 border border-amber-500/40 text-amber-300 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
+                DEMO / SAMPLE
+              </span>
             </div>
-            <div className="text-[11px] font-mono text-teal-400">
-              {transactions.length} Transactions Loaded
+            <div className="flex items-center gap-3 text-xs">
+              <span className="text-slate-400 text-[11px] hidden sm:inline">Scroll document container below to view all pages & records</span>
+              <span className="font-mono text-teal-300 font-bold bg-teal-950/80 px-2.5 py-1 rounded border border-teal-500/40 shadow-sm">
+                Showing 1–{transactions.length} of {transactions.length} records
+              </span>
             </div>
           </div>
 
-          <TruistStatementPreview data={statementData} />
+          {/* Dedicated Vertically Scrollable Document Container */}
+          <div className="flex-1 overflow-y-auto overflow-x-hidden rounded-xl bg-[#090312]/90 border border-white/10 p-2 sm:p-5 touch-pan-y custom-scrollbar shadow-inner">
+            <TruistStatementPreview data={statementData} />
+          </div>
         </div>
       </main>
     </div>

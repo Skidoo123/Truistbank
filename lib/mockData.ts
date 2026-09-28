@@ -68,7 +68,7 @@ export const generateMockTransactions = (
     { desc: 'TRUIST ATM DEPOSIT CASH/CHECK #8821', type: 'credit' as const, min: 200.00, max: 850.00, prefix: 'ATM' },
   ];
 
-  const numTransactions = count ? Math.min(200, Math.max(1, count)) : Math.floor(Math.random() * 8) + 25;
+  const numTransactions = count ? Math.min(200, Math.max(1, count)) : 29;
 
   const transactions: Transaction[] = [];
 
